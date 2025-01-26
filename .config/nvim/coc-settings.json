@@ -1,5 +1,0 @@
-{
-  "diagnostic.refreshAfterSave" : true,
-  "clangd.path": "~\\AppData\\Local\\coc\\extensions\\coc-clangd-data\\install\\15.0.3\\clangd_15.0.3\\bin\\clangd.exe",
-  "java.jdt.ls.vmargs": "-javaagent:C:\\Users\\berka\\AppData\\Local\\coc\\extensions\\coc-java-data\\server\\plugins\\lombok.jar -Xbootclasspath/a:C:\\Users\\berka\\AppData\\Local\\coc\\extensions\\coc-java-data\\server\\plugins\\lombok.jar"
-}
