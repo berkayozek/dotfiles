@@ -1,4 +1,4 @@
-return {	
+return {
 	{
 		"mfussenegger/nvim-jdtls",
 		ft = "java",
@@ -77,12 +77,12 @@ return {
 			"stevearc/conform.nvim",
 		},
 		init = function()
-            local mason = require("mason")
-            local mason_lspconfig = require("mason-lspconfig")
+			local mason = require("mason")
+			local mason_lspconfig = require("mason-lspconfig")
 			local lspconfig_defaults = require("lspconfig").util.default_config
-            
-            mason.setup({})
-            mason_lspconfig.setup({
+
+			mason.setup({})
+			mason_lspconfig.setup({
 				ensure_installed = {
 					"jdtls",
 					"ts_ls",
@@ -100,8 +100,7 @@ return {
 
 					-- this is the "custom handler" for `jdtls`
 					-- noop is an empty function that doesn't do anything
-					jdtls = function()
-                    end,
+					jdtls = function() end,
 				},
 			})
 			lspconfig_defaults.capabilities = vim.tbl_deep_extend(
@@ -127,7 +126,67 @@ return {
 					vim.keymap.set("n", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 					vim.keymap.set("x", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 				end,
-			})	
+			})
+		end,
+	},
+	{
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"nvimtools/none-ls.nvim",
+		},
+		opts = {
+			ensure_installed = {
+				"stylua",
+				"goimports",
+				"google-java-format",
+				"ts-standard",
+			},
+		},
+	},
+	{
+		"stevearc/conform.nvim",
+		event = { "BufWritePre" },
+		cmd = { "ConformInfo" },
+		keys = {
+			{
+				-- Customize or remove this keymap to your liking
+				"<leader>f",
+				function()
+					require("conform").format({ async = true })
+				end,
+				mode = "",
+				desc = "Format buffer",
+			},
+		},
+		-- This will provide type hinting with LuaLS
+		---@module "conform"
+		---@type conform.setupOpts
+		opts = {
+			-- Define your formatters
+			formatters_by_ft = {
+				lua = { "stylua" },
+				go = { "goimports" },
+				java = { "google-java-format" },
+                typescript = { "ts-standard" }
+			},
+			-- Set default options
+			default_format_opts = {
+				lsp_format = "fallback",
+			},
+			-- Set up format-on-save
+			format_on_save = false,
+			-- Customize formatters
+			formatters = {
+				shfmt = {
+					prepend_args = { "-i", "2" },
+				},
+			},
+		},
+		init = function()
+			-- If you want the formatexpr, here is the place to set it
+			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 		end,
 	},
 }
