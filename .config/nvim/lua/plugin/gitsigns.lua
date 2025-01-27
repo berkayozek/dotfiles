@@ -1,5 +1,8 @@
 return {
 	"lewis6991/gitsigns.nvim",
+	dependencies = {
+		"nvim-lua/plenary.nvim",
+	},
 	opts = {
 		signs = {
 			add = { text = "┃" },
@@ -49,8 +52,5 @@ return {
 			row = 0,
 			col = 1,
 		},
-	},
-	dependencies = {
-		"nvim-lua/plenary.nvim",
 	},
 }

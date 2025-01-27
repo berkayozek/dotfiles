@@ -1,9 +1,4 @@
-return {
-	{
-		"williamboman/mason.nvim",
-		lazy = false,
-		opts = {},
-	},
+return {	
 	{
 		"mfussenegger/nvim-jdtls",
 		ft = "java",
@@ -82,8 +77,33 @@ return {
 			"stevearc/conform.nvim",
 		},
 		init = function()
-			local lsp = require("lsp-zero")
+            local mason = require("mason")
+            local mason_lspconfig = require("mason-lspconfig")
 			local lspconfig_defaults = require("lspconfig").util.default_config
+            
+            mason.setup({})
+            mason_lspconfig.setup({
+				ensure_installed = {
+					"jdtls",
+					"ts_ls",
+					"pyright",
+					"gopls",
+					"clangd",
+					"lemminx",
+				},
+				handlers = {
+					-- this first function is the "default handler"
+					-- it applies to every language server without a "custom handler"
+					function(server_name)
+						require("lspconfig")[server_name].setup({})
+					end,
+
+					-- this is the "custom handler" for `jdtls`
+					-- noop is an empty function that doesn't do anything
+					jdtls = function()
+                    end,
+				},
+			})
 			lspconfig_defaults.capabilities = vim.tbl_deep_extend(
 				"force",
 				lspconfig_defaults.capabilities,
@@ -107,45 +127,7 @@ return {
 					vim.keymap.set("n", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 					vim.keymap.set("x", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 				end,
-			})
-
-			lsp.ensure_installed({
-				"ts_ls",
-				"pyright",
-				"gopls",
-				"jdtls",
-				"clangd",
-				"lemminx",
-			})
-
-			lsp.set_sign_icons({
-				error = "✘",
-				warn = "▲",
-				hint = "⚑",
-				info = "»",
-			})
-
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"jdtls",
-					"ts_ls",
-					"pyright",
-					"gopls",
-					"clangd",
-					"lemminx",
-				},
-				handlers = {
-					-- this first function is the "default handler"
-					-- it applies to every language server without a "custom handler"
-					function(server_name)
-						require("lspconfig")[server_name].setup({})
-					end,
-
-					-- this is the "custom handler" for `jdtls`
-					-- noop is an empty function that doesn't do anything
-					jdtls = lsp.noop,
-				},
-			})
+			})	
 		end,
 	},
 }
