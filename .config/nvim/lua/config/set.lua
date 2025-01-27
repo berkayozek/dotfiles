@@ -73,4 +73,7 @@ o.smartcase = true
 o.pumheight = 20
 
 -- Setting notify
-vim.notify = require("notify")
+local status, notify = pcall(require, "notify")
+if status then
+    vim.notify = notify
+end
