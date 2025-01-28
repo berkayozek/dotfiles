@@ -8,9 +8,7 @@ return {
 		event = "InsertEnter",
 		config = function()
 			local cmp = require("cmp")
-
 			require("luasnip.loaders.from_vscode").lazy_load()
-
 			cmp.setup({
 				sources = {
 					{ name = "nvim_lsp" },
@@ -74,12 +72,21 @@ return {
 			"L3MON4D3/LuaSnip", -- Required
 			"rafamadriz/friendly-snippets", -- Optional
 
+			-- Formatter
 			"stevearc/conform.nvim",
 		},
 		init = function()
 			local mason = require("mason")
 			local mason_lspconfig = require("mason-lspconfig")
 			local lspconfig_defaults = require("lspconfig").util.default_config
+			local cmp_lsp = require("cmp_nvim_lsp")
+			local noop = function() end
+			local capabilities = vim.tbl_deep_extend(
+				"force",
+				{},
+				vim.lsp.protocol.make_client_capabilities(),
+				cmp_lsp.default_capabilities()
+			)
 
 			mason.setup({})
 			mason_lspconfig.setup({
@@ -92,28 +99,18 @@ return {
 					"lemminx",
 				},
 				handlers = {
-					-- this first function is the "default handler"
-					-- it applies to every language server without a "custom handler"
 					function(server_name)
-						require("lspconfig")[server_name].setup({})
+						require("lspconfig")[server_name].setup({
+							capabilities = capabilities,
+						})
 					end,
-
-					-- this is the "custom handler" for `jdtls`
-					-- noop is an empty function that doesn't do anything
-					jdtls = function() end,
+					jdtls = noop,
 				},
 			})
-			lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-				"force",
-				lspconfig_defaults.capabilities,
-				require("cmp_nvim_lsp").default_capabilities()
-			)
-
 			vim.api.nvim_create_autocmd("LspAttach", {
 				desc = "LSP actions",
 				callback = function(event)
 					local opts = { buffer = event.buf }
-
 					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
 					vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
 					vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
@@ -122,9 +119,7 @@ return {
 					vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
 					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
 					vim.keymap.set("n", "<Leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-					vim.keymap.set({ "n", "x" }, "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
-					vim.keymap.set("n", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-					vim.keymap.set("x", "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+					vim.keymap.set({ "n", "x" }, "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 				end,
 			})
 		end,
@@ -160,24 +155,17 @@ return {
 				desc = "Format buffer",
 			},
 		},
-		-- This will provide type hinting with LuaLS
-		---@module "conform"
-		---@type conform.setupOpts
 		opts = {
-			-- Define your formatters
 			formatters_by_ft = {
 				lua = { "stylua" },
 				go = { "goimports" },
 				java = { "google-java-format" },
-                typescript = { "ts-standard" }
+				typescript = { "ts-standard" },
 			},
-			-- Set default options
 			default_format_opts = {
 				lsp_format = "fallback",
 			},
-			-- Set up format-on-save
 			format_on_save = false,
-			-- Customize formatters
 			formatters = {
 				shfmt = {
 					prepend_args = { "-i", "2" },
@@ -185,7 +173,6 @@ return {
 			},
 		},
 		init = function()
-			-- If you want the formatexpr, here is the place to set it
 			vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 		end,
 	},
