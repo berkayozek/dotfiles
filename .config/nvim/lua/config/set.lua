@@ -85,5 +85,3 @@ opt.updatetime = 50
 
 opt.signcolumn = "yes"
 
-
-

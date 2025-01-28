@@ -1,3 +1,8 @@
+local o = vim.o
+o.shiftwidth = 4
+o.softtabstop = 4
+o.tabstop = 4
+
 local java_cmds = vim.api.nvim_create_augroup("java_cmds", { clear = true })
 local cache_vars = {}
 
