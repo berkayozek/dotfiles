@@ -4,53 +4,6 @@ return {
 		ft = "java",
 	},
 	{
-		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
-		config = function()
-			local cmp = require("cmp")
-			require("luasnip.loaders.from_vscode").lazy_load()
-			cmp.setup({
-				sources = {
-					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-u>"] = cmp.mapping.scroll_docs(-4),
-					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<Tab>"] = nil,
-					["<S-Tab>"] = nil,
-				}),
-				snippet = {
-					expand = function(args)
-						vim.snippet.expand(args.body)
-					end,
-				},
-				formatting = {
-					fields = { "abbr", "kind", "menu" },
-					format = function(entry, item)
-						item.menu = ({
-							nvim_lsp = "[LSP]",
-							luasnip = "[Snippet]",
-							buffer = "[Buffer]",
-							path = "[Path]",
-						})[entry.source.name]
-						return item
-					end,
-				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				preselect = cmp.PreselectMode.Item,
-				completion = {
-					completeopt = "menuone,noinsert", -- Controls the behavior of the completion menu
-				},
-			})
-		end,
-	},
-	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			-- LSP Support
@@ -118,6 +71,66 @@ return {
 					vim.keymap.set("n", "<Leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
 					vim.keymap.set({ "n", "x" }, "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 				end,
+			})
+			local cmp = require("cmp")
+			local luasnip = require("luasnip")
+			require("luasnip.loaders.from_vscode").lazy_load()
+			cmp.setup({
+				sources = {
+					{ name = "nvim_lsp" },
+					{ name = "luasnip" },
+					{ name = "buffer" },
+				},
+				mapping = cmp.mapping.preset.insert({
+					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
+					["<C-Space>"] = cmp.mapping.complete(),
+					["<C-u>"] = cmp.mapping.scroll_docs(-4),
+					["<C-d>"] = cmp.mapping.scroll_docs(4),
+					["<C-l>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item()
+						elseif luasnip.locally_jumpable(1) then
+							luasnip.jump(1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+
+					["<C-h>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif luasnip.locally_jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+				}),
+				snippet = {
+					expand = function(args)
+						luasnip.lsp_expand(args.body)
+					end,
+				},
+				formatting = {
+					fields = { "abbr", "kind", "menu" },
+					format = function(entry, item)
+						item.menu = ({
+							nvim_lsp = "[LSP]",
+							luasnip = "[Snippet]",
+							buffer = "[Buffer]",
+							path = "[Path]",
+						})[entry.source.name]
+						return item
+					end,
+				},
+				window = {
+					completion = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
+				},
+				preselect = cmp.PreselectMode.Item,
+				completion = {
+					completeopt = "menuone,noinsert", -- Controls the behavior of the completion menu
+				},
 			})
 		end,
 	},
