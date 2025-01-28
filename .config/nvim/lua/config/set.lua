@@ -22,6 +22,9 @@ o.scrolloff = 5
 
 opt.breakindent = true
 
+opt.swapfile = false
+opt.backup = false
+
 -- wildignore
 opt.wildignore = {
 	"*.exe",
@@ -77,3 +80,10 @@ local status, notify = pcall(require, "notify")
 if status then
     vim.notify = notify
 end
+
+opt.updatetime = 50
+
+opt.signcolumn = "yes"
+
+
+
