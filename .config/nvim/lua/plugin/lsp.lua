@@ -15,9 +15,6 @@ return {
 					{ name = "luasnip" },
 				},
 				mapping = cmp.mapping.preset.insert({
-					["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
-					["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
 					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
@@ -160,7 +157,7 @@ return {
 				lua = { "stylua" },
 				go = { "goimports" },
 				java = { "google-java-format" },
-				typescript = { "ts-standard" },
+				typescript = { "prettier" },
 			},
 			default_format_opts = {
 				lsp_format = "fallback",
@@ -169,6 +166,9 @@ return {
 			formatters = {
 				shfmt = {
 					prepend_args = { "-i", "2" },
+				},
+				["google-java-format"] = {
+					prepend_args = { "--aosp" }, -- Ensure 4-space indentation
 				},
 			},
 		},

@@ -5,5 +5,6 @@ return {
 		require("mini.comment").setup()
 		require("mini.move").setup()
 		require("mini.pairs").setup()
+		require("mini.starter").setup()
 	end,
 }

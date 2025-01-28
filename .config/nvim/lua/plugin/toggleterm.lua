@@ -4,7 +4,7 @@ return {
 	version = "*", -- Use the latest stable release
 	config = function()
 		require("toggleterm").setup({
-			size = 10,
+			size = 15,
 			close_on_exit = true,
 			open_mapping = "<C-\\>",
 		})
@@ -12,7 +12,7 @@ return {
 
 		function _G.set_terminal_keymaps()
 			local opts = { buffer = 0 }
-			vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+			vim.keymap.set("t", "<c-n>", [[<C-\><C-n>]], opts)
 			vim.keymap.set("t", "<c-h>", [[<Cmd>wincmd h<CR>]], opts)
 			vim.keymap.set("t", "<c-j>", [[<Cmd>wincmd j<CR>]], opts)
 			vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)

@@ -7,7 +7,9 @@ return {
 	},
 	config = function()
 		local mocha = require("catppuccin.palettes").get_palette("mocha")
-		require("bufferline").setup({
+		local bufferline = require("bufferline")
+		bufferline.setup({
+			style_preset = bufferline.style_preset.mnimal,
 			highlights = require("catppuccin.groups.integrations.bufferline").get({
 				styles = { "italic", "bold" },
 				custom = {
@@ -42,5 +44,8 @@ return {
 		{ "<Leader>$", "<Cmd>BufferLineGoToBuffer -1<CR>", desc = "Go to last Buffer" },
 		{ "<Leader>l", "<Cmd>BufferLineCycleNext<CR>", desc = "Cycle to next buffer" },
 		{ "<Leader>h", "<Cmd>BufferLineCyclePrev<CR>", desc = "Cycle to previous buffer" },
+		{ "<Leader>gb", "<Cmd>BufferLinePick<CR>", desc = "Open bufferline pick" },
+		{ "<Leader>gB", "<Cmd>BufferLineClose<CR>", desc = "Close bufferline pick" },
+		{ "<Leader>bco", "<Cmd>BufferLineCloseOthers<CR>", desc = "Close all other visible buffers" },
 	},
 }
