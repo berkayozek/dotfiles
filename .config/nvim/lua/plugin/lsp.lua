@@ -147,6 +147,7 @@ return {
 				"goimports",
 				"google-java-format",
 				"ts-standard",
+				"fixjson",
 			},
 		},
 	},
@@ -171,6 +172,7 @@ return {
 				go = { "goimports" },
 				java = { "google-java-format" },
 				typescript = { "prettier" },
+                json = { "fixjson" }
 			},
 			default_format_opts = {
 				lsp_format = "fallback",

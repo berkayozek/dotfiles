@@ -6,6 +6,14 @@ o.tabstop = 4
 local java_cmds = vim.api.nvim_create_augroup("java_cmds", { clear = true })
 local cache_vars = {}
 
+local local_config = {} -- Initialize as an empty table
+
+local status, result = pcall(require, "local.java_config") -- Store the result in a separate variable
+
+if status then
+	local_config = result -- Assign result to local_config if successful
+end
+
 -- Here you can add files/folders that you use at
 -- the root of your project. `nvim-jdtls` will use
 -- these to find the path to your project source code.
@@ -247,6 +255,16 @@ function jdtls_setup()
 		},
 	}
 
+	local root_dir
+
+	if local_config.root_dir then
+		root_dir = local_config.root_dir
+	else
+		-- Your default configuration
+		root_dir =
+			vim.fs.dirname(vim.fs.find({ "pom.xml", "build.gradle", "settings.gradle", ".git" }, { upward = true })[1])
+	end
+
 	-- This starts a new client & server,
 	-- or attaches to an existing client & server depending on the `root_dir`.
 	jdtls.start_or_attach({
@@ -254,9 +272,7 @@ function jdtls_setup()
 		settings = lsp_settings,
 		on_attach = jdtls_on_attach,
 		capabilities = cache_vars.capabilities,
-		root_dir = vim.fs.dirname(
-			vim.fs.find({ "pom.xml", "build.gradle", "settings.gradle", ".git" }, { upward = true })[1]
-		),
+		root_dir = root_dir,
 		flags = {
 			allow_incremental_sync = true,
 		},
