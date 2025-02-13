@@ -47,6 +47,7 @@ return {
 					"gopls",
 					"clangd",
 					"lemminx",
+					"smithy_ls",
 				},
 				handlers = {
 					function(server_name)
@@ -172,7 +173,7 @@ return {
 				go = { "goimports" },
 				java = { "google-java-format" },
 				typescript = { "prettier" },
-                json = { "fixjson" }
+				json = { "fixjson" },
 			},
 			default_format_opts = {
 				lsp_format = "fallback",
