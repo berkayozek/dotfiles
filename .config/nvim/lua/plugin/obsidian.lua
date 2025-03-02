@@ -10,7 +10,13 @@ return {
 			{
 				name = "personal",
 				path = "~/Documents/notes",
+				backup = true,
 			},
+            {
+				name = "work",
+				path = "~/Documents/notes-work",
+				backup = false,
+			}
 		},
 		ui = {
 			enable = false,
@@ -47,4 +53,9 @@ return {
 			desc = "Toggle Checkbox (Visual)",
 		},
 	},
+	init = function(plugin)
+		local opts = plugin.opts
+		require("util/obsidian_utils").setup_custom_obsidian_commands(opts)
+		require("obsidian").setup(opts)
+	end,
 }
