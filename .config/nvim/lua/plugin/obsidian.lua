@@ -2,6 +2,7 @@ return {
 	"epwalsh/obsidian.nvim",
 	version = "*",
 	lazy = true,
+	ft = "markdown",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 	},
@@ -12,11 +13,11 @@ return {
 				path = "~/Documents/notes",
 				backup = true,
 			},
-            {
+			{
 				name = "work",
 				path = "~/Documents/notes-work",
 				backup = false,
-			}
+			},
 		},
 		ui = {
 			enable = false,
