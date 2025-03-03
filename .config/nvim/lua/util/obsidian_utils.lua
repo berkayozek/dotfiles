@@ -40,7 +40,7 @@ function M.setup_custom_obsidian_commands(opts)
 		if workspace then
 			git_utils.push_git_backup_async(workspace)
 		else
-			vim.notify("⚠️  File not in Obsidian vault; push skipped.", "warn")
+			vim.notify("⚠️  File not in Obsidian vault; push skipped.", "warn", { title = "Custom Obisidian.nvim" })
 		end
 	end, {})
 
@@ -49,8 +49,21 @@ function M.setup_custom_obsidian_commands(opts)
 		if workspace then
 			git_utils.pull_git_async(workspace)
 		else
-			vim.notify("⚠️  File not in Obsidian vault; pull skipped.", "warn")
+			vim.notify("⚠️  File not in Obsidian vault; pull skipped.", "warn", { title = "Custom Obsidian.nvim" })
 		end
+	end, {})
+
+	vim.api.nvim_create_user_command("ObsidianSwitchWorkspace", function()
+		vim.ui.input({ prompt = "Enter workspace name: " }, function(workspace)
+			if workspace and workspace ~= "" then
+				local success, err = pcall(vim.cmd, "ObsidianWorkspace " .. workspace)
+				if not success then
+					vim.notify("❌ Workspace '" .. workspace .. "' not found!", "error", { title = "Custom Obsidian.nvim" })
+				end
+			else
+				vim.notify("⚠️  Workspace name cannot be empty!", "warn", { title = "Custom Obsidian.nvim" })
+			end
+		end)
 	end, {})
 end
 

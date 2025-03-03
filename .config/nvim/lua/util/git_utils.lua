@@ -7,7 +7,11 @@ end
 
 local function run_git_command_async(path, args, success_msg, error_msg, callback)
 	if not M.is_git_repo_initialized(path) then
-		vim.notify("⚠️  Git is not initialized in the directory: " .. tostring(path), "warn")
+		vim.notify(
+			"⚠️  Git is not initialized in the directory: " .. tostring(path),
+			"warn",
+			{ title = "Git Utils" }
+		)
 		return
 	end
 
@@ -17,13 +21,13 @@ local function run_git_command_async(path, args, success_msg, error_msg, callbac
 	}, function(code, _, stderr)
 		vim.schedule(function()
 			if code == 0 then
-				vim.notify(success_msg, "info")
+				vim.notify(success_msg, "info", { title = "Git Utils" })
 				if callback then
 					callback()
 				end
 			else
 				local error_output = stderr and stderr:read() or "Unknown error"
-				vim.notify(error_msg .. "\n" .. error_output, "error")
+				vim.notify(error_msg .. "\n" .. error_output, "error", { title = "Git Utils" })
 			end
 		end)
 	end)

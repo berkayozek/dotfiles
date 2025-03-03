@@ -5,6 +5,7 @@ return {
 	ft = "markdown",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
+		"folke/snacks.nvim",
 	},
 	opts = {
 		workspaces = {
@@ -53,6 +54,12 @@ return {
 			mode = "v",
 			desc = "Toggle Checkbox (Visual)",
 		},
+        -- Custom mapping for switching workspaces
+        {
+            "obw",
+            "<cmd>ObsidianSwitchWorkspace<CR>",
+            desc = "Switch Workspace"
+        }
 	},
 	init = function(plugin)
 		local opts = plugin.opts
