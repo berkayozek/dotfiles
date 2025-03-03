@@ -75,12 +75,6 @@ o.smartcase = true
 -- popup settings
 o.pumheight = 20
 
--- Setting notify
-local status, notify = pcall(require, "notify")
-if status then
-    vim.notify = notify
-end
-
 opt.updatetime = 50
 
 opt.signcolumn = "yes"
