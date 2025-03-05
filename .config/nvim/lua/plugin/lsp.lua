@@ -48,6 +48,7 @@ return {
 					"lemminx",
 					"smithy_ls",
 					"lua_ls",
+					"ltex",
 				},
 				handlers = {
 					function(server_name)
