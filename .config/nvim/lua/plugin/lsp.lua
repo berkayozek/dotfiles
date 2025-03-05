@@ -28,7 +28,6 @@ return {
 		init = function()
 			local mason = require("mason")
 			local mason_lspconfig = require("mason-lspconfig")
-			local lspconfig_defaults = require("lspconfig").util.default_config
 			local cmp_lsp = require("cmp_nvim_lsp")
 			local noop = function() end
 			local capabilities = vim.tbl_deep_extend(
@@ -48,6 +47,7 @@ return {
 					"clangd",
 					"lemminx",
 					"smithy_ls",
+					"lua_ls",
 				},
 				handlers = {
 					function(server_name)

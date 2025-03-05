@@ -1,6 +1,7 @@
 return {
 	"epwalsh/pomo.nvim",
 	version = "*",
+	event = "VeryLazy",
 	dependencies = {
 		"rcarriga/nvim-notify",
 	},

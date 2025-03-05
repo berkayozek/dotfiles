@@ -2,14 +2,16 @@ return {
 	{
 
 		"jay-babu/mason-nvim-dap.nvim",
-		event = "VeryLazy",
+		lazy = true,
+		event = "BufReadPre",
 		opts = {
 			ensure_installed = { "delve", "javadbg", "javatest" },
 		},
 	},
 	{
 		"mfussenegger/nvim-dap",
-		event = "VeryLazy",
+		lazy = true,
+		event = "BufReadPre",
 		dependencies = {
 			"rcarriga/nvim-dap-ui",
 			"nvim-neotest/nvim-nio",
@@ -66,7 +68,8 @@ return {
 	},
 	{
 		"rcarriga/nvim-dap-ui",
-		event = "VeryLazy",
+		lazy = true,
+		event = "BufReadPre",
 		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 	},
 }
