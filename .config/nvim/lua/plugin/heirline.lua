@@ -17,12 +17,12 @@ return {
 
 		local LeftSeparator = {
 			provider = "",
-			hl = { fg = colors.lavender },
+			hl = { fg = colors.blue },
 		}
 
 		local RightSeparator = {
 			provider = "",
-			hl = { fg = colors.lavender },
+			hl = { fg = colors.blue },
 		}
 
 		local VIMODE_COLORS = {
@@ -71,7 +71,6 @@ return {
 				end
 			end,
 			provider = "",
-			hl = { fg = "black" },
 			hl = function(self)
 				local mode = self.mode:sub(1, 1)
 				return { fg = VIMODE_COLORS[mode], bg = colors.mantle }
@@ -270,6 +269,7 @@ return {
 
 		local Git = {
 			condition = conditions.is_git_repo,
+			update = { "BufEnter", "WinEnter" },
 
 			init = function(self)
 				self.status_dict = vim.b.gitsigns_status_dict
@@ -286,7 +286,6 @@ return {
 				end,
 				hl = { bold = true },
 			},
-			-- You could handle delimiters, icons and counts similar to Diagnostics
 			{
 				condition = function(self)
 					return self.has_changes
@@ -324,7 +323,7 @@ return {
 
 		local Ruler = {
 			provider = "%l:%L %c",
-			hl = { fg = colors.base, bg = colors.lavender, bold = true },
+			hl = { fg = colors.base, bg = colors.blue, bold = true },
 		}
 
 		local LSPActive = {
@@ -332,7 +331,8 @@ return {
 			update = { "LspAttach", "LspDetach" },
 			provider = function()
 				local names = {}
-				for i, server in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+				local clients = vim.lsp.get_clients({ bufnr = 0 })
+				for _, server in pairs(clients) do
 					table.insert(names, server.name)
 				end
 				return " [" .. table.concat(names, " ") .. "]"
