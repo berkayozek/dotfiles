@@ -8,6 +8,9 @@ return {
 		"folke/snacks.nvim",
 	},
 	opts = {
+		follow_url_func = function(url)
+			vim.fn.jobstart({ "open", url })
+		end,
 		workspaces = {
 			{
 				name = "personal",
@@ -54,12 +57,12 @@ return {
 			mode = "v",
 			desc = "Toggle Checkbox (Visual)",
 		},
-        -- Custom mapping for switching workspaces
-        {
-            "obw",
-            "<cmd>ObsidianSwitchWorkspace<CR>",
-            desc = "Switch Workspace"
-        }
+		-- Custom mapping for switching workspaces
+		{
+			"obw",
+			"<cmd>ObsidianSwitchWorkspace<CR>",
+			desc = "Switch Workspace",
+		},
 	},
 	init = function(plugin)
 		local opts = plugin.opts
