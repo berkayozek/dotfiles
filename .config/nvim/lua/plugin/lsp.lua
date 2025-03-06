@@ -62,6 +62,19 @@ return {
 						})
 					end,
 					jdtls = noop,
+					["lua_ls"] = function()
+						local lspconfig = require("lspconfig")
+						lspconfig.lua_ls.setup({
+							capabilities = capabilities,
+							settings = {
+								Lua = {
+									diagnostics = {
+										globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+									},
+								},
+							},
+						})
+					end,
 				},
 			})
 			vim.api.nvim_create_autocmd("LspAttach", {
