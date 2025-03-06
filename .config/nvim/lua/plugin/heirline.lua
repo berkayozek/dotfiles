@@ -8,6 +8,7 @@ return {
 		local heirline = require("heirline")
 		local conditions = require("heirline.conditions")
 		local utils = require("heirline.utils")
+		local local_utils = require("util/heirline_utils")
 
 		local colors = require("catppuccin.palettes").get_palette("mocha")
 		heirline.load_colors(colors)
@@ -396,7 +397,119 @@ return {
 			DefaultStatusline,
 		}
 
+		local TablineBufnr = {
+			provider = function(self)
+				local visible_buffers = local_utils.get_visible_buffers()
+
+				local current_buf_idx = 1
+				for i, buf in ipairs(visible_buffers) do
+					if buf == self.bufnr then
+						current_buf_idx = i
+						break
+					end
+				end
+
+				return tostring(current_buf_idx) .. " "
+			end,
+			hl = "Comment",
+		}
+
+		local TablineFileName = {
+			provider = function(self)
+				if self.file_path == "" then
+					return ""
+				end
+				local filename = vim.fn.fnamemodify(self.filename, ":p:t")
+				for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+					local file_path = vim.api.nvim_buf_get_name(bufnr)
+					local file_name = vim.fn.fnamemodify(file_path, ":t")
+					if filename == file_name and self.bufnr ~= bufnr then
+						return vim.fn.fnamemodify(self.filename, ":.")
+					end
+				end
+				return vim.fn.fnamemodify(self.filename, ":p:t")
+			end,
+
+			hl = function(self)
+				return { bold = self.is_active or self.is_visible, italic = true }
+			end,
+		}
+
+		local TablineFileFlags = {
+			{
+				condition = function(self)
+					return vim.api.nvim_get_option_value("modified", { buf = self.bufnr })
+				end,
+				provider = "[+]",
+				hl = { fg = "green" },
+			},
+			{
+				condition = function(self)
+					return not vim.api.nvim_get_option_value("modifiable", { buf = self.bufnr })
+						or vim.api.nvim_get_option_value("readonly", { buf = self.bufnr })
+				end,
+				provider = function(self)
+					if vim.api.nvim_get_option_value("buftype", { buf = self.bufnr }) == "terminal" then
+						return "  "
+					else
+						return ""
+					end
+				end,
+				hl = { fg = "orange" },
+			},
+		}
+
+		local TablineFileNameBlock = {
+			init = function(self)
+				self.filename = vim.api.nvim_buf_get_name(self.bufnr)
+			end,
+			hl = function(self)
+				if self.is_active then
+					return "TabLineSel"
+				else
+					return "TabLine"
+				end
+			end,
+			on_click = {
+				callback = function(_, minwid, _, button)
+					if button == "m" then -- close on mouse middle click
+						vim.schedule(function()
+							vim.api.nvim_buf_delete(minwid, { force = false })
+						end)
+					else
+						vim.api.nvim_win_set_buf(0, minwid)
+					end
+				end,
+				minwid = function(self)
+					return self.bufnr
+				end,
+				name = "heirline_tabline_buffer_callback",
+			},
+			TablineBufnr,
+			FileIcon,
+			TablineFileName,
+			TablineFileFlags,
+		}
+
+		local TablineBufferBlock = utils.surround({ "", "" }, function(self)
+			if self.is_active then
+				return utils.get_highlight("TabLineSel").bg
+			else
+				return utils.get_highlight("TabLine").bg
+			end
+		end, { TablineFileNameBlock })
+
+		local BufferLine = utils.make_buflist(
+			TablineBufferBlock,
+			{ provider = "", hl = { fg = "gray" } },
+			{ provider = "", hl = { fg = "gray" } }
+		)
+
+		local_utils.setup_shortcuts()
+		vim.o.showtabline = 2
+
 		require("heirline").setup({
+			tabline = BufferLine,
 			statusline = StatusLines,
 		})
 	end,
