@@ -246,19 +246,19 @@ return {
 					-- 0 is just another output, we can decide to print it or not!
 					return self.errors > 0 and (self.error_icon .. self.errors .. " ")
 				end,
-				hl = { fg = "red" },
+				hl = { fg = "red", bold = true },
 			},
 			{
 				provider = function(self)
 					return self.warnings > 0 and (self.warn_icon .. self.warnings .. " ")
 				end,
-				hl = { fg = "yellow" },
+				hl = { fg = "yellow", bold = true },
 			},
 			{
 				provider = function(self)
 					return self.info > 0 and (self.info_icon .. self.info .. " ")
 				end,
-				hl = { fg = "sapphire" },
+				hl = { fg = "sapphire", bold = true },
 			},
 			{
 				provider = function(self)
@@ -348,9 +348,9 @@ return {
 			Space,
 			FileNameBlock,
 			Space,
-			Diagnostics,
-			Space,
 			Git,
+			Space,
+			Diagnostics,
 			Align,
 			LSPActive,
 			Space,
