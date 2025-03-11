@@ -59,3 +59,9 @@ shift + alt - 7 : yabai -m window --space 7;
 
 # minimize a window
 shift + alt - u : yabai -m window --minimize
+
+# Stop Yabai with Ctrl + Alt + X
+ctrl + alt - x : yabai --stop-service
+
+# Start Yabai with Ctrl + Alt + S
+ctrl + alt - s : yabai --start-service

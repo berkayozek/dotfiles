@@ -23,11 +23,6 @@ yabai -m config mouse_action2 resize
 
 yabai -m mouse_drop_action swap
 
-# setup spaces
-for _ in $(yabai -m query --spaces | jq '.[].index | select(. > 6)'); do
-  yabai -m space --destroy 7
-done
-
 function setup_space {
   local idx="$1"
   local name="$2"
