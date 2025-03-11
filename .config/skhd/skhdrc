@@ -65,3 +65,9 @@ ctrl + alt - x : yabai --stop-service
 
 # Start Yabai with Ctrl + Alt + S
 ctrl + alt - s : yabai --start-service
+
+# Open or focus an app
+cmd + alt - i : open -a "iTerm"
+cmd + alt - c : open -a "Google Chrome"
+cmd + alt - m : open -a "Spotify"
+
