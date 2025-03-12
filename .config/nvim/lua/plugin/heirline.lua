@@ -17,12 +17,12 @@ return {
 		local Space = { provider = " " }
 
 		local LeftSeparator = {
-			provider = "",
+			provider = "█",
 			hl = { fg = colors.blue },
 		}
 
 		local RightSeparator = {
-			provider = "",
+			provider = "█",
 			hl = { fg = colors.blue },
 		}
 
@@ -71,7 +71,7 @@ return {
 					self.once = true
 				end
 			end,
-			provider = "",
+			provider = "█",
 			hl = function(self)
 				local mode = self.mode:sub(1, 1)
 				return { fg = VIMODE_COLORS[mode], bg = colors.mantle }
@@ -124,7 +124,7 @@ return {
 					self.once = true
 				end
 			end,
-			provider = "",
+			provider = "█",
 			hl = function(self)
 				local mode = self.mode:sub(1, 1)
 				return { fg = VIMODE_COLORS[mode], bg = colors.mantle }
@@ -431,7 +431,7 @@ return {
 			end,
 
 			hl = function(self)
-				return { bold = self.is_active or self.is_visible, italic = true }
+				return { bold = self.is_active or self.is_visible }
 			end,
 		}
 
