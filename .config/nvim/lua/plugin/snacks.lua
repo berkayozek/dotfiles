@@ -11,6 +11,7 @@ return {
 				return not vim.tbl_contains(exclude, ft)
 			end,
 		},
+		zen = {},
 	},
 	keys = {
 		{
@@ -18,7 +19,14 @@ return {
 			function()
 				Snacks.lazygit()
 			end,
-			desc = "Lazygit",
+			desc = "Toggle Lazygit",
+		},
+		{
+			"<leader>zz",
+			function()
+				Snacks.zen()
+			end,
+			desc = "Toggle zen mode",
 		},
 	},
 }
