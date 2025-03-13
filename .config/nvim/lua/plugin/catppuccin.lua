@@ -1,42 +1,40 @@
-
 return {
-    'catppuccin/nvim', 
-    name = 'catppuccin',
-    config = function()
-        require("catppuccin").setup({
-            flavour = "mocha", -- latte, frappe, macchiato, mocha
-            background = { -- :h background
-                light = "latte",
-                dark = "mocha",
-            },
-            transparent_background = false,
-            term_colors = false,
-            no_italic = true, -- force no italic
-            no_bold = false, -- force no bold
-            integrations = {
-                gitsigns = true,
-                leap = true,
-                nvimtree = true,
-                telescope = true,
-                treesitter = true,
-                vimwiki = true,
-                which_key = true
-            },
-            native_lsp = {
-                enabled = false,
-                underlines = {
-                    errors = { "underline" },
-                    hints = { "underline" },
-                    warnings = { "underline" },
-                    information = { "underline" },
-            },
+	"catppuccin/nvim",
+	name = "catppuccin",
+	priority = 1000,
+	config = function()
+		require("catppuccin").setup({
+			flavour = "mocha", -- latte, frappe, macchiato, mocha
+			background = {
+				light = "latte",
+				dark = "mocha",
+			},
+			transparent_background = false,
+			term_colors = false,
+			no_italic = false,
+			no_bold = false,
+			styles = {
+				conditionals = {},
+			},
+			integrations = {
+				cmp = true,
+				gitsigns = true,
+				notify = true,
+				mini = {
+					enabled = true,
+					indentscope_color = "",
+				},
+				leap = true,
+				telescope = true,
+				treesitter = true,
+				which_key = true,
+				snacks = {
+					enabled = true,
+					indent_scope_color = "",
+				},
+			},
+		})
 
-        },
-        indent_blankline = {
-        enabled = true,
-    },
-})
-
-vim.cmd.colorscheme "catppuccin"
-    end
+		vim.cmd.colorscheme("catppuccin")
+	end,
 }
