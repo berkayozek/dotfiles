@@ -2,7 +2,9 @@ return {
 	"folke/snacks.nvim",
 	lazy = true,
 	opts = {
-		words = {},
+		words = {
+			modes = { "n" },
+		},
 		input = {},
 		lazygit = {},
 		indent = {
@@ -19,6 +21,15 @@ return {
 					auto_close = true,
 				},
 			},
+		},
+		terminal = {
+			win = {
+				position = "float",
+				height = 0.8,
+				width = 0.8,
+				border = "rounded",
+			},
+			shell = vim.g.shell,
 		},
 	},
 	keys = {
@@ -42,6 +53,24 @@ return {
 				Snacks.explorer()
 			end,
 			desc = "Toggle file explorer",
+		},
+		{
+			"<C-q>",
+			function()
+				Snacks.terminal.toggle()
+			end,
+			desc = "Toggle Terminal",
+			mode = { "n", "t" },
+		},
+		{
+			"<C-n>",
+			function()
+				if vim.fn.mode() == "t" then
+					vim.cmd("stopinsert")
+				end
+			end,
+			desc = "Exit terminal mode",
+			mode = { "t" }, -- only apply in terminal mode
 		},
 	},
 }
