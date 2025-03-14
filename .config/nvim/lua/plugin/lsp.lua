@@ -7,20 +7,18 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			-- LSP Support
-			"williamboman/mason.nvim", -- Optional
-			"williamboman/mason-lspconfig.nvim", -- Optional
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
 
 			-- Autocompletion
-			"hrsh7th/nvim-cmp", -- Required
-			"hrsh7th/cmp-nvim-lsp", -- Required
-			"hrsh7th/cmp-buffer", -- Optional
-			"hrsh7th/cmp-path", -- Optional
-			"saadparwaiz1/cmp_luasnip", -- Optional
-			"hrsh7th/cmp-nvim-lua", -- Optional
+			"hrsh7th/nvim-cmp",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
 
 			-- Snippets
-			"L3MON4D3/LuaSnip", -- Required
-			"rafamadriz/friendly-snippets", -- Optional
+			"echasnovski/mini.nvim",
+			"rafamadriz/friendly-snippets",
 
 			-- Formatter
 			"stevearc/conform.nvim",
@@ -93,42 +91,25 @@ return {
 				end,
 			})
 			local cmp = require("cmp")
-			local luasnip = require("luasnip")
-			require("luasnip.loaders.from_vscode").lazy_load()
 			cmp.setup({
 				sources = {
 					{ name = "nvim_lsp" },
-					{ name = "luasnip" },
 					{ name = "buffer" },
+					{ name = "path" },
 				},
 				mapping = cmp.mapping.preset.insert({
 					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
 					["<C-Space>"] = cmp.mapping.complete(),
 					["<C-u>"] = cmp.mapping.scroll_docs(-4),
 					["<C-d>"] = cmp.mapping.scroll_docs(4),
-					["<C-l>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif luasnip.locally_jumpable(1) then
-							luasnip.jump(1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
-
-					["<C-h>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.locally_jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
 				}),
 				snippet = {
 					expand = function(args)
-						luasnip.lsp_expand(args.body)
+						local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+						vim.notify(insert, "info")
+						insert({ body = args.body }) -- Insert at cursor
+						cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+						require("cmp.config").set_onetime({ sources = {} })
 					end,
 				},
 				formatting = {
@@ -136,7 +117,6 @@ return {
 					format = function(entry, item)
 						item.menu = ({
 							nvim_lsp = "[LSP]",
-							luasnip = "[Snippet]",
 							buffer = "[Buffer]",
 							path = "[Path]",
 						})[entry.source.name]
