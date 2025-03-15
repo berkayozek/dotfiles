@@ -25,7 +25,7 @@ return {
 					indentscope_color = "",
 				},
 				flash = true,
-				telescope = true,
+				telescope = false,
 				treesitter = true,
 				which_key = true,
 				snacks = {
