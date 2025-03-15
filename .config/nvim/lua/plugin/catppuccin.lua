@@ -24,7 +24,7 @@ return {
 					enabled = true,
 					indentscope_color = "",
 				},
-				leap = true,
+				flash = true,
 				telescope = true,
 				treesitter = true,
 				which_key = true,
@@ -32,6 +32,7 @@ return {
 					enabled = true,
 					indent_scope_color = "",
 				},
+				neotest = true,
 			},
 		})
 
