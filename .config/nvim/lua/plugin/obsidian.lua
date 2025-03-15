@@ -1,5 +1,5 @@
 return {
-	"epwalsh/obsidian.nvim",
+	"obsidian-nvim/obsidian.nvim",
 	version = "*",
 	ft = "markdown",
 	dependencies = {
@@ -24,6 +24,10 @@ return {
 		},
 		ui = {
 			enable = false,
+		},
+		picker = {
+			-- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', 'mini.pick' or 'snacks.pick'.
+			name = "snacks.pick",
 		},
 	},
 	keys = {
