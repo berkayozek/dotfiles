@@ -1,3 +1,18 @@
+local workspaces = {
+	{
+		name = "personal",
+		path = "~/Documents/notes",
+		backup = true,
+	},
+	{
+		name = "work",
+		path = "~/Documents/notes-work",
+		backup = false,
+	},
+}
+
+require("util/obsidian_utils").setup_custom_obsidian_commands(workspaces)
+
 return {
 	"obsidian-nvim/obsidian.nvim",
 	version = "*",
@@ -10,18 +25,7 @@ return {
 		follow_url_func = function(url)
 			vim.fn.jobstart({ "open", url })
 		end,
-		workspaces = {
-			{
-				name = "personal",
-				path = "~/Documents/notes",
-				backup = true,
-			},
-			{
-				name = "work",
-				path = "~/Documents/notes-work",
-				backup = false,
-			},
-		},
+		workspaces = workspaces,
 		ui = {
 			enable = false,
 		},
@@ -67,9 +71,4 @@ return {
 			desc = "Switch Workspace",
 		},
 	},
-	init = function(plugin)
-		local opts = plugin.opts
-		require("util/obsidian_utils").setup_custom_obsidian_commands(opts)
-		require("obsidian").setup(opts)
-	end,
 }
