@@ -1,6 +1,8 @@
 return {
 	{
 		"kawre/leetcode.nvim",
+		cmd = "Leet",
+		event = { "BufRead leetcode.nvim", "BufNewFile leetcode.nvim" },
 		build = ":TSUpdate html",
 		dependencies = {
 			"nvim-telescope/telescope.nvim",
