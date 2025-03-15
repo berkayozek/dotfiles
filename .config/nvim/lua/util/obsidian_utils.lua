@@ -13,9 +13,9 @@ function M.find_workspace_for_file(workspaces)
 	return nil
 end
 
-function M.generate_workspace_regex(opts)
+function M.generate_workspace_regex(workspaces)
 	local regex_parts = {}
-	for _, workspace in ipairs(opts.workspaces) do
+	for _, workspace in ipairs(workspaces) do
 		local workspace_path = vim.fn.expand(workspace.path)
 		if workspace.backup then
 			table.insert(regex_parts, workspace_path .. "/*.md")
@@ -24,11 +24,11 @@ function M.generate_workspace_regex(opts)
 	return tostring(table.concat(regex_parts, ","))
 end
 
-function M.setup_custom_obsidian_commands(opts)
+function M.setup_custom_obsidian_commands(workspaces)
 	vim.api.nvim_create_autocmd("BufReadPost", {
-		pattern = M.generate_workspace_regex(opts),
+		pattern = M.generate_workspace_regex(workspaces),
 		callback = function()
-			local workspace = M.find_workspace_for_file(opts.workspaces)
+			local workspace = M.find_workspace_for_file(workspaces)
 			if workspace then
 				git_utils.pull_git_async(workspace)
 			end
@@ -36,7 +36,7 @@ function M.setup_custom_obsidian_commands(opts)
 	})
 
 	vim.api.nvim_create_user_command("ObsidianPush", function()
-		local workspace = M.find_workspace_for_file(opts.workspaces)
+		local workspace = M.find_workspace_for_file(workspaces)
 		if workspace then
 			git_utils.push_git_backup_async(workspace)
 		else
@@ -45,7 +45,7 @@ function M.setup_custom_obsidian_commands(opts)
 	end, {})
 
 	vim.api.nvim_create_user_command("ObsidianPull", function()
-		local workspace = M.find_workspace_for_file(opts.workspaces)
+		local workspace = M.find_workspace_for_file(workspaces)
 		if workspace then
 			git_utils.pull_git_async(workspace)
 		else
