@@ -31,6 +31,7 @@ return {
 			},
 			shell = vim.g.shell,
 		},
+		notifier = {},
 	},
 	keys = {
 		{
