@@ -9,19 +9,6 @@ return {
 			-- LSP Support
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-
-			-- Autocompletion
-			"hrsh7th/nvim-cmp",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-
-			-- Snippets
-			"echasnovski/mini.nvim",
-			"rafamadriz/friendly-snippets",
-
-			-- Formatter
-			"stevearc/conform.nvim",
 		},
 		init = function()
 			local mason = require("mason")
@@ -73,63 +60,6 @@ return {
 							},
 						})
 					end,
-				},
-			})
-			vim.api.nvim_create_autocmd("LspAttach", {
-				desc = "LSP actions",
-				callback = function(event)
-					local opts = { buffer = event.buf }
-					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-					vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-					vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-					vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-					vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-					vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-					vim.keymap.set("n", "<Leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-					vim.keymap.set({ "n", "x" }, "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-				end,
-			})
-			local cmp = require("cmp")
-			cmp.setup({
-				sources = {
-					{ name = "nvim_lsp" },
-					{ name = "buffer" },
-					{ name = "path" },
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<CR>"] = cmp.mapping.confirm({ select = true }), -- Confirm selection on Enter
-					["<C-Space>"] = cmp.mapping.complete(),
-					["<C-u>"] = cmp.mapping.scroll_docs(-4),
-					["<C-d>"] = cmp.mapping.scroll_docs(4),
-				}),
-				snippet = {
-					expand = function(args)
-						local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-						vim.notify(insert, "info")
-						insert({ body = args.body }) -- Insert at cursor
-						cmp.resubscribe({ "TextChangedI", "TextChangedP" })
-						require("cmp.config").set_onetime({ sources = {} })
-					end,
-				},
-				formatting = {
-					fields = { "abbr", "kind", "menu" },
-					format = function(entry, item)
-						item.menu = ({
-							nvim_lsp = "[LSP]",
-							buffer = "[Buffer]",
-							path = "[Path]",
-						})[entry.source.name]
-						return item
-					end,
-				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				preselect = cmp.PreselectMode.Item,
-				completion = {
-					completeopt = "menuone,noinsert", -- Controls the behavior of the completion menu
 				},
 			})
 		end,
