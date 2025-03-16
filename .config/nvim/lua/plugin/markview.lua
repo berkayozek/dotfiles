@@ -1,6 +1,6 @@
 return {
 	"OXY2DEV/markview.nvim",
-	lazy = false,
+    event = { 'BufReadPre', 'BufNewFile' },
 	preview = {
 		icon_provider = "devicons",
 	},
