@@ -1,6 +1,7 @@
 return {
 	"folke/snacks.nvim",
 	lazy = true,
+	event = "BufReadPost",
 	opts = {
 		words = {
 			modes = { "n" },
@@ -90,7 +91,21 @@ return {
 		{
 			"<leader>fb",
 			function()
-				Snacks.picker.buffers()
+				Snacks.picker.buffers({
+					on_show = function()
+						vim.cmd.stopinsert()
+					end,
+					current = true,
+					sort_lastused = true,
+					win = {
+						input = {
+							keys = {
+								["d"] = "bufdelete",
+							},
+						},
+						list = { keys = { ["d"] = "bufdelete" } },
+					},
+				})
 			end,
 			desc = "Buffers",
 		},
@@ -206,6 +221,29 @@ return {
 			end,
 			desc = "Visual selection or word",
 			mode = { "n", "x" },
+		},
+		{
+			"<leader>st",
+			function()
+				Snacks.picker.grep({
+					search = "TODO:",
+					on_show = function()
+						vim.cmd.stopinsert()
+					end,
+				})
+			end,
+		},
+		{
+			"<leader>sT",
+			function()
+				Snacks.picker.grep({
+					search = "(TODO|FIX|NOTE|FIXME)",
+					regex = true,
+					on_show = function()
+						vim.cmd.stopinsert()
+					end,
+				})
+			end,
 		},
 	},
 }
