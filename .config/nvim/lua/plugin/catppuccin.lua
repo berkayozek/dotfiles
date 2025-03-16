@@ -17,7 +17,7 @@ return {
 				conditionals = {},
 			},
 			integrations = {
-				cmp = true,
+				blink_cmp = true,
 				gitsigns = true,
 				notify = true,
 				mini = {
