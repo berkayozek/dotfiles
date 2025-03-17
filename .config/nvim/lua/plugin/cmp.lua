@@ -30,8 +30,8 @@ return {
 					score_offset = 15,
 					min_keyword_length = 3,
 				},
-				buffer = {
-					name = "Snippets",
+				snippets = {
+					name = "Mini",
 					module = "blink.cmp.sources.snippets",
 					score_offset = 15,
 					min_keyword_length = 2,
