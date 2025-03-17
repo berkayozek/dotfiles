@@ -1,7 +1,7 @@
 return {
 	"rebelot/heirline.nvim",
 	dependencies = {
-		"nvim-tree/nvim-web-devicons",
+		"echasnovski/mini.nvim",
 	},
 	event = "VeryLazy",
 	config = function()
@@ -151,14 +151,17 @@ return {
 			init = function(self)
 				local filename = self.filename
 				local extension = vim.fn.fnamemodify(filename, ":e")
-				self.icon, self.icon_color =
-					require("nvim-web-devicons").get_icon_color(filename, extension, { default = true })
+				local is_file = type(filename) == "string"
+				local category = is_file and "file" or "extension"
+
+				self.icon, self.icon_color_group = require("mini.icons").get(category, is_file and filename or extension)
+                self.icon_color = vim.api.nvim_get_hl(0, { name = self.icon_color_group })
 			end,
 			provider = function(self)
 				return self.icon and (self.icon .. " ")
 			end,
 			hl = function(self)
-				return { fg = self.icon_color }
+				return self.icon_color
 			end,
 		}
 

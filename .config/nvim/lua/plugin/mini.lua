@@ -7,6 +7,9 @@ return {
 		require("mini.move").setup()
 		require("mini.pairs").setup()
 		require("mini.starter").setup()
+		require("mini.icons").setup({
+			style = "glyph",
+		})
 
 		local snippets = require("mini.snippets")
 		local gen_loader = snippets.gen_loader
