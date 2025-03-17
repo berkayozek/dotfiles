@@ -1,7 +1,7 @@
 return {
 	"saghen/blink.cmp",
 	version = "*",
-	build = "cargo build --release",
+	build = "cargo +nightly build --release",
 	dependencies = {
 		"rafamadriz/friendly-snippets",
 	},
@@ -12,7 +12,7 @@ return {
 			nerd_font_variant = "mono",
 		},
 		sources = {
-			default = { "lsp", "path", "buffer" },
+			default = { "lsp", "path", "buffer", "snippets" },
 			providers = {
 				lsp = {
 					name = "LSP",
@@ -29,6 +29,12 @@ return {
 					module = "blink.cmp.sources.buffer",
 					score_offset = 15,
 					min_keyword_length = 3,
+				},
+				buffer = {
+					name = "Snippets",
+					module = "blink.cmp.sources.snippets",
+					score_offset = 15,
+					min_keyword_length = 2,
 				},
 			},
 		},
