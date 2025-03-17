@@ -10,7 +10,7 @@ return {
 		lazygit = {},
 		indent = {
 			filter = function(buf)
-				local exclude = { "markdown", "text", "leetcode.nvim" }
+				local exclude = { "markdown", "text", "leetcode.nvim", "lazy", "mason" }
 				local ft = vim.bo[buf].filetype
 				return not vim.tbl_contains(exclude, ft)
 			end,
