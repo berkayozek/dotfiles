@@ -69,6 +69,9 @@ return {
 			["<S-k>"] = { "scroll_documentation_up", "fallback" },
 			["<S-j>"] = { "scroll_documentation_down", "fallback" },
 
+			["<C-h>"] = { "snippet_backward", "fallback" },
+			["<C-l>"] = { "snippet_forward", "fallback" },
+
 			["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
 			["<CR>"] = { "accept", "fallback" },
 			["<C-e>"] = { "hide", "fallback" },

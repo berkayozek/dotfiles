@@ -1,79 +1,113 @@
+local ensure_installed = {
+	"jdtls",
+	"typescript-language-server",
+	"pyright",
+	"gopls",
+	"clangd",
+	"lemminx",
+	"smithy-language-server",
+	"lua-language-server",
+	"ltex-ls",
+}
 return {
 	{
 		"mfussenegger/nvim-jdtls",
 		ft = "java",
 	},
 	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			-- LSP Support
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
+		"williamboman/mason.nvim",
+		cmd = "Mason",
+		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+		build = ":MasonUpdate",
+		opts = {
+			ensure_installed = ensure_installed,
 		},
-		init = function()
-			local mason = require("mason")
+		config = function(_, opts)
+			require("mason").setup(opts)
+			local mr = require("mason-registry")
+			mr:on("package:install:success", function()
+				vim.defer_fn(function()
+					require("lazy.core.handler.event").trigger({
+						event = "FileType",
+						buf = vim.api.nvim_get_current_buf(),
+					})
+				end, 100)
+			end)
+
+			mr.refresh(function()
+				for _, tool in ipairs(opts.ensure_installed) do
+					local p = mr.get_package(tool)
+					if not p:is_installed() then
+						p:install()
+					end
+				end
+			end)
+		end,
+	},
+	{
+		"neovim/nvim-lspconfig",
+		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+		dependencies = {
+			"saghen/blink.cmp",
+			"mason.nvim",
+			{ "williamboman/mason-lspconfig.nvim", config = function() end },
+		},
+		opts = {
+			servers = {
+				jdtls = { enabled = false },
+				lua_ls = {
+					Lua = {
+						diagnostics = {
+							globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
+						},
+					},
+				},
+			},
+		},
+		config = function(_, opts)
+			local lspconfig = require("lspconfig")
 			local mason_lspconfig = require("mason-lspconfig")
-			local cmp_lsp = require("cmp_nvim_lsp")
-			local noop = function() end
+
 			local capabilities = vim.tbl_deep_extend(
 				"force",
 				{},
 				vim.lsp.protocol.make_client_capabilities(),
-				cmp_lsp.default_capabilities()
+				require("blink.cmp").get_lsp_capabilities() or {},
+				opts.capabilities or {}
 			)
+			local on_attach = function(_, bufnr)
+				local function buf_set_keymap(mode, lhs, rhs, desc)
+					vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc, noremap = true, silent = true })
+				end
 
-			vim.api.nvim_create_autocmd("LspAttach", {
-				desc = "LSP actions",
-				callback = function(event)
-					local opts = { buffer = event.buf }
-					vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
-					vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
-					vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
-					vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
-					vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-					vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
-					vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
-					vim.keymap.set("n", "<Leader>rn", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
-					vim.keymap.set({ "n", "x" }, "<Leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-				end,
-			})
+				buf_set_keymap("n", "K", vim.lsp.buf.hover, "Show hover information")
+				buf_set_keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
+				buf_set_keymap("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
+				buf_set_keymap("n", "gi", vim.lsp.buf.implementation, "Go to implementation")
+				buf_set_keymap("n", "go", vim.lsp.buf.type_definition, "Go to type definition")
+				buf_set_keymap("n", "gr", vim.lsp.buf.references, "Show references")
+				buf_set_keymap("n", "gs", vim.lsp.buf.signature_help, "Show signature help")
+				buf_set_keymap("n", "<Leader>rn", vim.lsp.buf.rename, "Rename symbol")
+				buf_set_keymap({ "n", "x" }, "<Leader>ca", vim.lsp.buf.code_action, "Show code actions")
+				buf_set_keymap("n", "<leader>e", vim.diagnostic.open_float, "Open diagnostic float")
+				buf_set_keymap("n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic")
+				buf_set_keymap("n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic")
+				buf_set_keymap("n", "<leader>q", vim.diagnostic.setloclist, "Set location list")
+			end
 
-			vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError", numhl = "" })
-			vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint", numhl = "" })
-			vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSignInfo", numhl = "" })
-			vim.fn.sign_define("DiagnosticSignWarn", { text = "", texthl = "DiagnosticSignWarn", numhl = "" })
-
-			mason.setup({})
 			mason_lspconfig.setup({
-				ensure_installed = {
-					"jdtls",
-					"ts_ls",
-					"pyright",
-					"gopls",
-					"clangd",
-					"lemminx",
-					"smithy_ls",
-					"lua_ls",
-					"ltex",
-				},
 				handlers = {
 					function(server_name)
-						require("lspconfig")[server_name].setup({
+						local settings = opts.servers[server_name] or {}
+
+						if settings.enabled == false then
+							return
+						end
+
+						lspconfig[server_name].setup({
 							capabilities = capabilities,
-						})
-					end,
-					jdtls = noop,
-					["lua_ls"] = function()
-						local lspconfig = require("lspconfig")
-						lspconfig.lua_ls.setup({
-							capabilities = capabilities,
-							settings = {
-								Lua = {
-									diagnostics = {
-										globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-									},
-								},
-							},
+							on_attach = on_attach,
+							settings = settings,
 						})
 					end,
 				},
