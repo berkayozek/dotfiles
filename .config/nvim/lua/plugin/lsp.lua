@@ -100,6 +100,9 @@ return {
 					buf_set_keymap("n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic")
 					buf_set_keymap("n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic")
 					buf_set_keymap("n", "<leader>q", vim.diagnostic.setloclist, "Set location list")
+					buf_set_keymap("n", "<leader>td", function()
+						vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+					end, "Toggle diagnostic")
 				end,
 			})
 
