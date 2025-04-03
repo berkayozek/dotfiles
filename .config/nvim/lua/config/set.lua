@@ -3,6 +3,9 @@ local wo = vim.wo
 local bo = vim.bo
 local opt = vim.opt
 
+-- hide mode infromation from status line
+opt.showmode = false
+
 o.termguicolors = true
 
 -- copy indent on a new line
