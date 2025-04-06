@@ -65,7 +65,7 @@ return {
 			mode = { "n", "t" },
 		},
 		{
-			"<C-n>",
+			"<C-/>",
 			function()
 				if vim.fn.mode() == "t" then
 					vim.cmd("stopinsert")
@@ -232,6 +232,7 @@ return {
 					end,
 				})
 			end,
+			desc = "Search TODO",
 		},
 		{
 			"<leader>sT",
@@ -244,6 +245,7 @@ return {
 					end,
 				})
 			end,
+			desc = "Search TODO, FIX, NOTE, and FIXME",
 		},
 	},
 }
