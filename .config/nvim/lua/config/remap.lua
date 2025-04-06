@@ -15,7 +15,7 @@ map.set("n", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard"
 map.set("v", "<leader>p", '"+p', { noremap = true, desc = "Paste from clipboard" }) -- For visual mode
 
 -- save file
-map.set({ "i", "x", "n", "s" }, "<leader>w", "<cmd>w<cr><esc>", { desc = "Save File" })
+map.set({ "x", "n", "s" }, "<leader>w", "<cmd>w<cr><esc>", { desc = "Save File" })
 
 -- quit
 map.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
