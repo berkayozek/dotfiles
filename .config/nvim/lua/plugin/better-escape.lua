@@ -1,5 +1,14 @@
 return {
 	"max397574/better-escape.nvim",
 	event = "InsertEnter",
-	opts = {},
+	opts = {
+		mappings = {
+			i = {
+				j = {
+					k = "<Esc>",
+					j = "<Esc>",
+				},
+			},
+		},
+	},
 }
