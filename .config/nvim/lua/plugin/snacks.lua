@@ -43,6 +43,19 @@ return {
 			desc = "Toggle Lazygit",
 		},
 		{
+			"<leader>gG",
+			function()
+				require("snacks.lazygit")({
+					args = {
+						"--git-dir=" .. os.getenv("HOME") .. "/.dotfiles",
+						"--work-tree=" .. os.getenv("HOME"),
+					},
+					cwd = os.getenv("HOME"),
+				})
+			end,
+			desc = "Lazygit (dotfiles)",
+		},
+		{
 			"<leader>zz",
 			function()
 				Snacks.zen()
