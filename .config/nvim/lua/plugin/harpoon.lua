@@ -34,7 +34,6 @@ return {
 				desc = "Harpoon toggle quick menu",
 				mode = "n",
 			},
-
 			{
 				"<C-P>",
 				function()
