@@ -78,7 +78,7 @@ return {
 			mode = { "n", "t" },
 		},
 		{
-			"<C-/>",
+			"<C-\\>",
 			function()
 				if vim.fn.mode() == "t" then
 					vim.cmd("stopinsert")
