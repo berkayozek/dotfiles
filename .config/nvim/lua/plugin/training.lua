@@ -18,5 +18,5 @@ return {
 			},
 		},
 	},
-	{ "ThePrimeagen/vim-be-good", lazy = true },
+	{ "ThePrimeagen/vim-be-good", cmd = "VimBeGood" },
 }
