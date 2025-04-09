@@ -25,14 +25,25 @@ return {
 		follow_url_func = function(url)
 			vim.fn.jobstart({ "open", url })
 		end,
+		daily_notes = {
+			folder = "dailies",
+		},
 		workspaces = workspaces,
 		ui = {
 			enable = false,
 		},
+		completion = {
+			nvim_cmp = false,
+			blink = true,
+		},
 		picker = {
-			-- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', 'mini.pick' or 'snacks.pick'.
 			name = "snacks.pick",
 		},
+		note_path_func = function(spec)
+			local file_name = spec.title or spec.id
+			local path = spec.dir / file_name
+			return path:with_suffix(".md")
+		end,
 	},
 	keys = {
 		{ "obo", "<cmd>ObsidianOpen<CR>", desc = "Open Obsidian" },
