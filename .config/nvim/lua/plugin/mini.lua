@@ -32,17 +32,5 @@ return {
 				gen_loader.from_lang(),
 			},
 		})
-
-		local hipatterns = require("mini.hipatterns")
-		hipatterns.setup({
-			highlighters = {
-				fixme = { pattern = "()%s?FIXME:?()", group = "MiniHipatternsFixme" },
-				hack = { pattern = "()%s?HACK:?()", group = "MiniHipatternsHack" },
-				todo = { pattern = "()%s?TODO:?()", group = "MiniHipatternsTodo" },
-				note = { pattern = "()%s?NOTE:?()", group = "MiniHipatternsNote" },
-
-				hex_color = hipatterns.gen_highlighter.hex_color(),
-			},
-		})
 	end,
 }
