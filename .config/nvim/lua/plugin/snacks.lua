@@ -235,30 +235,5 @@ return {
 			desc = "Visual selection or word",
 			mode = { "n", "x" },
 		},
-		{
-			"<leader>st",
-			function()
-				Snacks.picker.grep({
-					search = "TODO:",
-					on_show = function()
-						vim.cmd.stopinsert()
-					end,
-				})
-			end,
-			desc = "Search TODO",
-		},
-		{
-			"<leader>sT",
-			function()
-				Snacks.picker.grep({
-					search = "(TODO|FIX|NOTE|FIXME)",
-					regex = true,
-					on_show = function()
-						vim.cmd.stopinsert()
-					end,
-				})
-			end,
-			desc = "Search TODO, FIX, NOTE, and FIXME",
-		},
 	},
 }
