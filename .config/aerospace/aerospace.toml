@@ -191,6 +191,10 @@ if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
+if.app-id = 'com.nvidia.gfnpc.mall'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
 if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace 2'
 
@@ -204,6 +208,10 @@ run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-id = 'com.amazon.Amazon-Chime'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
 run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
