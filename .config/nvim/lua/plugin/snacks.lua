@@ -33,6 +33,7 @@ return {
 			shell = vim.g.shell,
 		},
 		notifier = {},
+		image = {},
 	},
 	keys = {
 		{
