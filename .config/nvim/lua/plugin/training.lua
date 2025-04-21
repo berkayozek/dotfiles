@@ -24,6 +24,7 @@ return {
 			{ "<leader>lc", "<cmd>Leet console<cr>", desc = "Leet toggle console" },
 			{ "<leader>ls", "<cmd>Leet submit<cr>", desc = "Leet submit question" },
 			{ "<leader>lo", "<cmd>Leet open<cr>", desc = "Leet open question on browser" },
+			{ "<leader>lh", "<cmd>Leet hints<cr>", desc = "Leet open hints" },
 		},
 	},
 	{ "ThePrimeagen/vim-be-good", cmd = "VimBeGood" },
