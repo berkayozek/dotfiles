@@ -32,5 +32,16 @@ return {
 				gen_loader.from_lang(),
 			},
 		})
+
+		local map_multistep = require("mini.keymap").map_multistep
+		map_multistep("i", "<Tab>", { "pmenu_next" })
+		map_multistep("i", "<S-Tab>", { "pmenu_prev" })
+		map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
+		map_multistep("i", "<BS>", { "minipairs_bs" })
+
+		local map_combo = require("mini.keymap").map_combo
+		local mode = { "i", "c", "x", "s" }
+		map_combo(mode, "jk", "<BS><BS><Esc>")
+		map_combo(mode, "kj", "<BS><BS><Esc>")
 	end,
 }
