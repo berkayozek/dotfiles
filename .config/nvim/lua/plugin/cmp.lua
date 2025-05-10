@@ -41,12 +41,16 @@ return {
 		completion = {
 			documentation = {
 				auto_show = true,
+				window = {
+					border = "rounded",
+				},
 			},
 			ghost_text = {
 				enabled = true,
 			},
 			list = { selection = { preselect = true, auto_insert = false } },
 			menu = {
+				border = "rounded",
 				draw = {
 					treesitter = { "lsp" },
 					columns = {
