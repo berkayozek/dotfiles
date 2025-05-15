@@ -1,14 +1,3 @@
-local ensure_installed = {
-	"jdtls",
-	"typescript-language-server",
-	"pyright",
-	"gopls",
-	"clangd",
-	"lemminx",
-	"smithy-language-server",
-	"lua-language-server",
-	"ltex-ls",
-}
 return {
 	{
 		"mfussenegger/nvim-jdtls",
@@ -20,61 +9,35 @@ return {
 		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
 		build = ":MasonUpdate",
 		opts = {
-			ensure_installed = ensure_installed,
+			ensure_installed = {
+				"jdtls",
+				"typescript-language-server",
+				"pyright",
+				"gopls",
+				"clangd",
+				"lemminx",
+				"smithy-language-server",
+				"lua-language-server",
+				"ltex-ls",
+			},
 		},
-		config = function(_, opts)
-			require("mason").setup(opts)
-			local mr = require("mason-registry")
-			mr:on("package:install:success", function()
-				vim.defer_fn(function()
-					require("lazy.core.handler.event").trigger({
-						event = "FileType",
-						buf = vim.api.nvim_get_current_buf(),
-					})
-				end, 100)
-			end)
-
-			mr.refresh(function()
-				for _, tool in ipairs(opts.ensure_installed) do
-					local p = mr.get_package(tool)
-					if not p:is_installed() then
-						p:install()
-					end
-				end
-			end)
-		end,
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"mason-org/mason.nvim",
+		},
+		opts = {
+			automatic_enable = {
+				exclude = { "jdtls" },
+			},
+		},
 	},
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		dependencies = {
-			"saghen/blink.cmp",
-			"mason.nvim",
-			{ "williamboman/mason-lspconfig.nvim", config = function() end },
-		},
-		opts = {
-			servers = {
-				jdtls = { enabled = false },
-				lua_ls = {
-					Lua = {
-						diagnostics = {
-							globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-						},
-					},
-				},
-			},
-		},
-		config = function(_, opts)
-			local lspconfig = require("lspconfig")
-			local mason_lspconfig = require("mason-lspconfig")
-
-			local capabilities = vim.tbl_deep_extend(
-				"force",
-				{},
-				vim.lsp.protocol.make_client_capabilities(),
-				require("blink.cmp").get_lsp_capabilities() or {},
-				opts.capabilities or {}
-			)
+		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
 				desc = "LSP actions",
 				callback = function(event)
@@ -104,23 +67,6 @@ return {
 						vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 					end, "Toggle diagnostic")
 				end,
-			})
-
-			mason_lspconfig.setup({
-				handlers = {
-					function(server_name)
-						local settings = opts.servers[server_name] or {}
-
-						if settings.enabled == false then
-							return
-						end
-
-						lspconfig[server_name].setup({
-							capabilities = capabilities,
-							settings = settings,
-						})
-					end,
-				},
 			})
 		end,
 	},
