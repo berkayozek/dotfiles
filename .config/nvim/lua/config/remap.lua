@@ -26,3 +26,7 @@ map.set("x", ">", ">gv", { noremap = true, silent = true, desc = "Shift right an
 
 -- lazy
 map.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+-- Buffer management
+map.set("n", "<leader>bd", "<cmd>%bdelete<cr>", { desc = "Delete All Buffers" })
+map.set("n", "<leader>bo", "<cmd>%bdelete|edit#|bdelete#<cr>", { desc = "Delete All Other Buffers" })
