@@ -43,5 +43,7 @@ return {
 		local mode = { "i", "c", "x", "s" }
 		map_combo(mode, "jk", "<BS><BS><Esc>")
 		map_combo(mode, "kj", "<BS><BS><Esc>")
+		map_combo("t", "jk", "<C-\\>")
+		map_combo("t", "kj", "<C-\\>")
 	end,
 }
