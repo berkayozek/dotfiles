@@ -97,8 +97,15 @@ return {
 					S = "S-LINE",
 					R = "REPLACE",
 					t = "TERMINAL",
+					["r"] = "REPLACE",
+					["rm"] = "MORE",
+					["r?"] = "CONFIRM",
+					["!"] = "SHELL",
+					["nt"] = "TERMINAL",
 				}
-				return " " .. mode_map[self.mode] .. " "
+				local mode = self.mode or "n"
+				local mode_name = mode_map[mode] or "UNKNOWN"
+				return " " .. mode_name .. " "
 			end,
 			hl = function(self)
 				local color = VIMODE_COLORS[self.mode] or "white"
