@@ -9,6 +9,10 @@ return {
 		keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
 		build = ":MasonUpdate",
 		opts = {
+			registries = {
+				"lua:custom_registry", -- custom registry
+				"github:mason-org/mason-registry", -- default Mason registry
+			},
 			ensure_installed = {
 				"jdtls",
 				"typescript-language-server",
@@ -19,6 +23,7 @@ return {
 				"smithy-language-server",
 				"lua-language-server",
 				"ltex-ls",
+				"palantir-java-format",
 			},
 		},
 	},
@@ -106,7 +111,7 @@ return {
 			formatters_by_ft = {
 				lua = { "stylua" },
 				go = { "goimports" },
-				java = { "google-java-format" },
+				java = { "palantir-java-format" },
 				typescript = { "prettier" },
 				json = { "fixjson" },
 			},
