@@ -13,18 +13,6 @@ return {
 				"lua:custom_registry", -- custom registry
 				"github:mason-org/mason-registry", -- default Mason registry
 			},
-			ensure_installed = {
-				"jdtls",
-				"typescript-language-server",
-				"pyright",
-				"gopls",
-				"clangd",
-				"lemminx",
-				"smithy-language-server",
-				"lua-language-server",
-				"ltex-ls",
-				"palantir-java-format",
-			},
 		},
 	},
 	{
@@ -34,6 +22,17 @@ return {
 			"mason-org/mason.nvim",
 		},
 		opts = {
+			ensure_installed = {
+				"jdtls",
+				"ts_ls",
+				"pyright",
+				"gopls",
+				"clangd",
+				"lemminx",
+				"smithy_ls",
+				"lua_ls",
+				"ltex",
+			},
 			automatic_enable = {
 				exclude = { "jdtls" },
 			},
@@ -85,10 +84,11 @@ return {
 		opts = {
 			ensure_installed = {
 				"stylua",
-				"goimports",
 				"google-java-format",
 				"ts-standard",
 				"fixjson",
+				"goimports",
+				"palantir-java-format",
 			},
 		},
 	},
