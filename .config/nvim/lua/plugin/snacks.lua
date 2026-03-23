@@ -64,7 +64,7 @@ return {
 			desc = "Toggle zen mode",
 		},
 		{
-			"<Tab>",
+			"<leader>e",
 			function()
 				Snacks.explorer()
 			end,

@@ -63,7 +63,6 @@ return {
 					buf_set_keymap("n", "gs", vim.lsp.buf.signature_help, "Show signature help")
 					buf_set_keymap("n", "<Leader>rn", vim.lsp.buf.rename, "Rename symbol")
 					buf_set_keymap({ "n", "x" }, "<Leader>ca", vim.lsp.buf.code_action, "Show code actions")
-					buf_set_keymap("n", "<leader>e", vim.diagnostic.open_float, "Open diagnostic float")
 					buf_set_keymap("n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic")
 					buf_set_keymap("n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic")
 					buf_set_keymap("n", "<leader>q", vim.diagnostic.setloclist, "Set location list")
