@@ -5,7 +5,6 @@ return {
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = { "OXY2DEV/markview.nvim" },
 	config = function()
-		vim.opt.runtimepath:append(vim.fn.stdpath("data") .. "/site/")
 		require("nvim-treesitter").setup({
 			ensure_installed = {
 				"c",
@@ -21,6 +20,12 @@ return {
 				"yaml",
 			},
 			auto_install = true,
+		})
+
+		vim.api.nvim_create_autocmd("FileType", {
+			callback = function(args)
+				pcall(vim.treesitter.start, args.buf)
+			end,
 		})
 	end,
 }
