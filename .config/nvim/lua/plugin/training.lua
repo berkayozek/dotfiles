@@ -1,25 +1,25 @@
 local function is_leetcode_buffer(bufnr)
-  local buf_name = vim.api.nvim_buf_get_name(bufnr or 0)
-  return buf_name and string.find(buf_name, "/leetcode/", 1, true)
+	local buf_name = vim.api.nvim_buf_get_name(bufnr or 0)
+	return buf_name and string.find(buf_name, "/leetcode/", 1, true)
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("DisableLspForLeetCode", { clear = true }),
-  callback = function(args)
-    -- We need the buffer number from the arguments
-    local bufnr = args.buf
+	group = vim.api.nvim_create_augroup("DisableLspForLeetCode", { clear = true }),
+	callback = function(args)
+		-- We need the buffer number from the arguments
+		local bufnr = args.buf
 
-    -- Check if the path contains the leetcode directory
-    if is_leetcode_buffer(bufnr) then
-      -- CRITICAL: Defer the detach operation.
-      -- This waits until the initial LSP setup is complete, avoiding errors.
-      vim.schedule(function()
-        vim.lsp.buf_detach_client(bufnr, args.data.client_id)
-      end)
-      vim.diagnostic.enable(false)
-      vim.b.completion = false
-    end
-  end,
+		-- Check if the path contains the leetcode directory
+		if is_leetcode_buffer(bufnr) then
+			-- CRITICAL: Defer the detach operation.
+			-- This waits until the initial LSP setup is complete, avoiding errors.
+			vim.schedule(function()
+				vim.lsp.buf_detach_client(bufnr, args.data.client_id)
+			end)
+			vim.diagnostic.enable(false)
+			vim.b.completion = false
+		end
+	end,
 })
 
 return {
@@ -53,4 +53,30 @@ return {
 		},
 	},
 	{ "ThePrimeagen/vim-be-good", cmd = "VimBeGood" },
+	{
+		"saxon1964/neovim-tips",
+		version = "*", -- Only update on tagged releases
+		lazy = true, -- Load only when keybinds are triggered
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"OXY2DEV/markview.nvim",
+		},
+		opts = {
+			-- IMPORTANT: Daily tip DOES NOT WORK with lazy = true
+			-- Reason: lazy = true loads plugin only when keybinds are triggered,
+			--         but daily_tip needs plugin loaded at startup
+			-- Solution: Keep daily_tip = 0 here, or use Option 2 below for daily tips
+			daily_tip = 0, -- 0 = off, 1 = once per day, 2 = every startup
+			-- Other optional settings...
+			bookmark_symbol = "🌟 ",
+		},
+		keys = {
+			{ "<leader>nto", ":NeovimTips<CR>", desc = "Neovim tips" },
+			{ "<leader>ntb", ":NeovimTipsBookmarks<CR>", desc = "Bookmarked tips" },
+			{ "<leader>ntr", ":NeovimTipsRandom<CR>", desc = "Show random tip" },
+			{ "<leader>nte", ":NeovimTipsEdit<CR>", desc = "Edit your tips" },
+			{ "<leader>nta", ":NeovimTipsAdd<CR>", desc = "Add your tip" },
+			{ "<leader>ntp", ":NeovimTipsPdf<CR>", desc = "Open tips PDF" },
+		},
+	},
 }
